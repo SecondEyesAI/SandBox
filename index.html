@@ -1,16 +1,242 @@
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SecondEyes AI</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    .report-header { font-weight: bold; color: #007bff; text-transform: uppercase; }
-    .report-title { font-size: 1.5rem; font-weight: bold; }
-    .table-header { background-color: #6c757d; color: white; }
+    .logo { color: #fd7e14; font-weight: bold; font-size: 2.5rem; letter-spacing: 0.2em; }
+    .company { font-size: 1.5rem; font-weight: bold; }
+    .services { font-size: 1.2rem; }
+    .report-title { font-weight: bold; font-size: 1.8rem; }
+    .form-rev { font-size: 0.9rem; color: gray; }
+    .table-header { background-color: #e9ecef; }
     .accept { color: green; font-weight: bold; }
     .reject { color: red; font-weight: bold; }
-    .quality-badge { font-size: 1.2rem; padding: 0.5rem; border-radius: 0.25rem; background-color: #e9ecef; }
-    .signature { font-style: italic; border-top: 1px solid #000; padding-top: 0.5rem; }
-    .appendix { font-size: 0.9rem; color: #6c757d; page-break-before: always; } /* Simulates page break */
+    .image-border { border: 2px solid #0d6efd; padding: 0.5rem; }
+    .quality-badge { font-size: 1.2rem; padding: 0.5rem; border-radius: 0.25rem; background-color: #e9ecef; text-center: true; }
+    .signature { font-style: italic; border-top: 1px solid #000; padding-top: 0.5rem; text-align: right; }
+    .appendix { font-size: 0.9rem; page-break-before: always; margin-top: 2rem; border-top: 1px dashed #ccc; padding-top: 1rem; } /* Simulates new page */
   </style>
 </head>
+<body class="bg-light text-dark p-5">
+  <div class="container">
+    <h1 class="text-center display-3">SecondEyes AI</h1>
+    <p class="text-center lead">Weld Inspection Reports – Live & Auto-Updating</p>
+
+    <form id="report-form" class="mb-4">
+      <div class="row">
+        <div class="col-md-4">
+          <label for="client" class="form-label">Client</label>
+          <input type="text" class="form-control" id="client" value="Stellar">
+        </div>
+        <div class="col-md-4">
+          <label for="location" class="form-label">Location/Facility</label>
+          <input type="text" class="form-control" id="location" value="Brazos River Venture">
+        </div>
+        <div class="col-md-4">
+          <label for="date" class="form-label">Date of Inspection</label>
+          <input type="date" class="form-control" id="date" value="2025-11-08">
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-4">
+          <label for="asset" class="form-label">Asset Number</label>
+          <input type="text" class="form-control" id="asset" value="TNK50001/TNK50004 Pump Skid">
+        </div>
+        <div class="col-md-4">
+          <label for="serial" class="form-label">Serial Number</label>
+          <input type="text" class="form-control" id="serial" value="N/A">
+        </div>
+        <div class="col-md-4">
+          <label for="year" class="form-label">Year Built</label>
+          <input type="text" class="form-control" id="year" value="2025">
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-4">
+          <label for="material" class="form-label">Material</label>
+          <input type="text" class="form-control" id="material" value="316L SS">
+        </div>
+        <div class="col-md-4">
+          <label for="service" class="form-label">Service</label>
+          <input type="text" class="form-control" id="service" value="Process">
+        </div>
+        <div class="col-md-4">
+          <label for="description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="description" value="Pump Skid">
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-4">
+          <label for="inspector" class="form-label">Inspector's Name</label>
+          <input type="text" class="form-control" id="inspector" value="Matt Baxter">
+        </div>
+        <div class="col-md-4">
+          <label for="cert" class="form-label">Certification Number/Link</label>
+          <input type="text" class="form-control" id="cert" value="https://icpinspector.api.org/profile/matthewallanbaxter671714/wallet">
+        </div>
+        <div class="col-md-4">
+          <label for="signature" class="form-label">Signature</label>
+          <input type="text" class="form-control" id="signature" value="[Digital Signature]">
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <label for="scope" class="form-label">Scope</label>
+          <textarea class="form-control" id="scope" rows="2">Perform internal visual inspection via borescope on Blend Tank 50001 & 50004 Pump Skid.</textarea>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <label for="summary" class="form-label">Summary</label>
+          <textarea class="form-control" id="summary" rows="3">Internal visual inspection of 100% of accessible welds on Blend Tank 50001 & 50004 Pump Skid was conducted per AWS D18.1 acceptance criteria. A RalCam Model F606B borescope was used to inspect 113 welds. Of those 113 welds, 93 were accepted, and 20 were rejected.</textarea>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-12">
+          <label for="defects" class="form-label">Weld Table Data (Format: Weld #: Defect or blank)</label>
+          <textarea class="form-control" id="defects" rows="10">1: 
+2: 
+3: 
+4: IP
+5: 
+6: LOF
+7: 
+8: IP
+9: IP
+9A: 
+10: 
+11: Multiple
+12: IP
+13: 
+14: 
+14A: 
+15: 
+16: 
+17: 
+18: 
+19: 
+20: 
+21: Multiple
+22: 
+23: 
+24: 
+25: 
+26: 
+27: 
+28: 
+29: IP
+30: 
+31: 
+31A: 
+33: 
+34: 
+35: 
+36: 
+38: IP
+39: 
+40: 
+41: 
+42: 
+43: 
+44: 
+45: 
+46: 
+47: 
+48: 
+49: 
+50: 
+51: 
+52: 
+53: 
+54: 
+55: 
+56: 
+57: 
+58: LOF
+59: IP
+60: IP
+61: 
+62: Multiple
+63: EPM
+64: 
+65: 
+66: 
+67: 
+68: 
+69: 
+70: 
+71: 
+72: Multiple
+73: IP
+74: 
+75: 
+75A: 
+76: Multiple
+77: 
+78: IP
+79: 
+79A: 
+80 Hemi: 
+81 Hemi: 
+82 Hemi: IP
+83 Hemi: 
+84: 
+85: 
+86: 
+87: 
+88: LOF
+89: 
+90: 
+91: 
+92: 
+93: 
+94: 
+95: 
+96: 
+97: 
+98: 
+99: 
+100: 
+101: 
+102: 
+103: 
+104: 
+105: 
+106: 
+107: 
+108: 
+109: 
+110: 
+</textarea>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-4">
+          <label for="compliance" class="form-label">Compliance</label>
+          <input type="text" class="form-control" id="compliance" value="API 510 / ASME IX (Accept/Reject per defect)">
+        </div>
+        <div class="col-md-4">
+          <label for="actions" class="form-label">Recommended Actions</label>
+          <input type="text" class="form-control" id="actions" value="Grind, Rework">
+        </div>
+        <div class="col-md-4">
+          <label for="overall" class="form-label">Overall Quality (1-10)</label>
+          <input type="number" class="form-control" id="overall" min="1" max="10" value="8">
+        </div>
+      </div>
+    </form>
+
+    <div class="text-center">
+      <button class="btn btn-primary btn-lg" onclick="generateReport()">Generate Report</button>
+    </div>
+  </div>
+
+  <div id="report-output" class="mt-5 container bg-white p-4 shadow-lg"></div>
+
+  <script src="report.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
