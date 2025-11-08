@@ -1,83 +1,16 @@
-<body class="bg-dark text-white p-5">
-  <div class="container text-center">
-    <h1 class="display-3">SecondEyes AI</h1>
-    <p class="lead">Weld Inspection Reports – Live & Auto-Updating</p>
-
-    <form id="report-form" class="mb-4">
-      <div class="row">
-        <div class="col-md-4">
-          <label for="client" class="form-label">Client</label>
-          <input type="text" class="form-control" id="client" placeholder="e.g., Stellar" value="Stellar">
-        </div>
-        <div class="col-md-4">
-          <label for="location" class="form-label">Location/Facility</label>
-          <input type="text" class="form-control" id="location" placeholder="e.g., Brazos River Venture" value="Brazos River Venture">
-        </div>
-        <div class="col-md-4">
-          <label for="date" class="form-label">Date of Inspection</label>
-          <input type="date" class="form-control" id="date" value="2025-11-03">
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-6">
-          <label for="asset" class="form-label">Asset Number</label>
-          <input type="text" class="form-control" id="asset" placeholder="e.g., TNK50001/TNK50004 Pump Skid" value="TNK50001/TNK50004 Pump Skid">
-        </div>
-        <div class="col-md-6">
-          <label for="material" class="form-label">Material/Service/Description</label>
-          <input type="text" class="form-control" id="material" placeholder="e.g., 316L SS / Process / Pump Skid" value="316L SS / Process / Pump Skid">
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <label for="scope" class="form-label">Scope</label>
-          <textarea class="form-control" id="scope" rows="2">Perform internal visual inspection via borescope on Blend Tank 50001 & 50004 Pump Skid.</textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <label for="summary" class="form-label">Summary</label>
-          <textarea class="form-control" id="summary" rows="2">Internal visual inspection of 100% of accessible welds on Blend Tank 50001 & 50004 Pump Skid was conducted per AWS D18.1 acceptance criteria. A RalCam Model F606B borescope was used to inspect welds. Of those welds, 93 were accepted, and 20 were rejected.</textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-6">
-          <label for="image1" class="form-label">Image 1 URL (Google Drive share link)</label>
-          <input type="url" class="form-control" id="image1" placeholder="https://drive.google.com/uc?export=view&id=...">
-        </div>
-        <div class="col-md-6">
-          <label for="image2" class="form-label">Image 2 URL</label>
-          <input type="url" class="form-control" id="image2" placeholder="https://drive.google.com/uc?export=view&id=...">
-        </div>
-      </div>
-      <!-- Add more image fields as needed -->
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <label for="defects" class="form-label">Defect Summary (AI Placeholder)</label>
-          <textarea class="form-control" id="defects" rows="3">Weld 1: No defects. Overall quality: 10/10.\nWeld 2: Minor porosity at 3 o'clock, size 2mm, Reject.</textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-4">
-          <label for="compliance" class="form-label">Compliance</label>
-          <input type="text" class="form-control" id="compliance" placeholder="e.g., API 510 / ASME IX (Accept/Reject per defect)" value="API 510 / ASME IX (Accept/Reject per defect)">
-        </div>
-        <div class="col-md-4">
-          <label for="actions" class="form-label">Recommended Actions</label>
-          <input type="text" class="form-control" id="actions" placeholder="e.g., Grind, Rework" value="Grind, Rework">
-        </div>
-        <div class="col-md-4">
-          <label for="overall" class="form-label">Overall Quality (1-10)</label>
-          <input type="number" class="form-control" id="overall" min="1" max="10" value="8">
-        </div>
-      </div>
-    </form>
-
-    <button class="btn btn-primary btn-lg" onclick="generateReport()">Generate Report</button>
-  </div>
-
-  <div id="report-output" class="mt-5"></div>
-
-  <script src="report.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SecondEyes AI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .report-header { font-weight: bold; color: #007bff; text-transform: uppercase; }
+    .report-title { font-size: 1.5rem; font-weight: bold; }
+    .table-header { background-color: #6c757d; color: white; }
+    .accept { color: green; font-weight: bold; }
+    .reject { color: red; font-weight: bold; }
+    .quality-badge { font-size: 1.2rem; padding: 0.5rem; border-radius: 0.25rem; background-color: #e9ecef; }
+    .signature { font-style: italic; border-top: 1px solid #000; padding-top: 0.5rem; }
+    .appendix { font-size: 0.9rem; color: #6c757d; page-break-before: always; } /* Simulates page break */
+  </style>
+</head>
