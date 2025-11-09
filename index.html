@@ -1,137 +1,227 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SecondEyes AI</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .logo { color: #fd7e14; font-weight: bold; font-size: 2rem; letter-spacing: 0.5em; }
-    .company { font-weight: bold; font-size: 1.2rem; }
-    .services { font-size: 1rem; }
-    .report-title { font-weight: bold; font-size: 1.5rem; }
-    .form-rev { font-size: 0.8rem; color: #6c757d; text-align: right; }
-    .table th { background-color: #e9ecef; color: #000; }
-    .accept { color: green; }
-    .reject { color: red; }
-    .image-border { border: 2px solid blue; }
-    .appendix { font-size: 0.85rem; margin-top: 2rem; border-top: 1px solid #dee2e6; padding-top: 1rem; }
-  </style>
-</head>
-<body class="bg-dark text-white p-5">
-  <div class="container">
-    <h1 class="text-center display-3">SecondEyes AI</h1>
-    <p class="text-center lead">Weld Inspection Reports – Live & Auto-Updating</p>
+function generateReport() {
+  // Collect form values (with fallbacks to PDF sample data if empty)
+  const client = document.getElementById('client').value || 'Stellar';
+  const location = document.getElementById('location').value || 'Brazos River Venture';
+  const date = document.getElementById('date').value || '11/08/2025';
+  const asset = document.getElementById('asset').value || 'TNK50001/TNK50004 Pump Skid';
+  const serial = document.getElementById('serial').value || 'N/A';
+  const year = document.getElementById('year').value || '2025';
+  const material = document.getElementById('material').value || '316L SS';
+  const service = document.getElementById('service').value || 'Process';
+  const description = document.getElementById('description').value || 'Pump Skid';
+  const inspector = document.getElementById('inspector').value || 'Matt Baxter';
+  const cert = document.getElementById('cert').value || 'https://icpinspector.api.org/profile/matthewallanbaxter671714/wallet';
+  const signature = document.getElementById('signature').value || '[Digital Signature]';
+  const scope = document.getElementById('scope').value || 'Perform internal visual inspection via borescope on Blend Tank 50001 & 50004 Pump Skid.';
+  const summary = document.getElementById('summary').value || 'Internal visual inspection of 100% of accessible welds on Blend Tank 50001 & 50004 Pump Skid was conducted per AWS D18.1 acceptance criteria. A RalCam Model F606B borescope was used to inspect 113 welds. Of those 113 welds, 93 were accepted, and 20 were rejected.';
+  const defectsRaw = document.getElementById('defects').value.split('\n').filter(line => line.trim());
+  const image1 = document.getElementById('image1').value || 'https://www.lewa.com/fileadmin/_processed_/8/7/csm_cp_adv_flowrate-pressure-skid_2c6559014d.jpg'; // Stock pump skid
+  const image2 = document.getElementById('image2').value || 'https://www.projecteka.com/wp-content/uploads/2022/03/Isometric-pipe-drawing-1-scaled.jpg'; // Stock isometric
+  const compliance = document.getElementById('compliance').value || 'API 510 / ASME IX (Accept/Reject per defect)';
+  const actions = document.getElementById('actions').value || 'Grind, Rework';
+  const overall = document.getElementById('overall').value || '8';
 
-    <form id="report-form" class="mb-4">
-      <div class="row">
-        <div class="col-md-4">
-          <label for="client" class="form-label">Client</label>
-          <input type="text" class="form-control" id="client" placeholder="e.g., Stellar">
-        </div>
-        <div class="col-md-4">
-          <label for="location" class="form-label">Location/Facility</label>
-          <input type="text" class="form-control" id="location" placeholder="e.g., Brazos River Venture">
-        </div>
-        <div class="col-md-4">
-          <label for="date" class="form-label">Date of Inspection</label>
-          <input type="date" class="form-control" id="date">
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-4">
-          <label for="asset" class="form-label">Asset Number</label>
-          <input type="text" class="form-control" id="asset" placeholder="e.g., TNK50001/TNK50004 Pump Skid">
-        </div>
-        <div class="col-md-4">
-          <label for="serial" class="form-label">Serial Number</label>
-          <input type="text" class="form-control" id="serial" placeholder="e.g., N/A">
-        </div>
-        <div class="col-md-4">
-          <label for="year" class="form-label">Year Built</label>
-          <input type="text" class="form-control" id="year" placeholder="e.g., 2025">
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-4">
-          <label for="material" class="form-label">Material</label>
-          <input type="text" class="form-control" id="material" placeholder="e.g., 316L SS">
-        </div>
-        <div class="col-md-4">
-          <label for="service" class="form-label">Service</label>
-          <input type="text" class="form-control" id="service" placeholder="e.g., Process">
-        </div>
-        <div class="col-md-4">
-          <label for="description" class="form-label">Description</label>
-          <input type="text" class="form-control" id="description" placeholder="e.g., Pump Skid">
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-4">
-          <label for="inspector" class="form-label">Inspector's Name</label>
-          <input type="text" class="form-control" id="inspector" placeholder="e.g., Matt Baxter">
-        </div>
-        <div class="col-md-4">
-          <label for="cert" class="form-label">Certification Number/Link</label>
-          <input type="text" class="form-control" id="cert" placeholder="e.g., https://icpinspector.api.org/...">
-        </div>
-        <div class="col-md-4">
-          <label for="signature" class="form-label">Signature</label>
-          <input type="text" class="form-control" id="signature" placeholder="e.g., [Digital Signature]">
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <label for="scope" class="form-label">Scope</label>
-          <textarea class="form-control" id="scope" rows="2" placeholder="e.g., Perform internal visual inspection via borescope on Blend Tank 50001 & 50004 Pump Skid."></textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <label for="summary" class="form-label">Summary</label>
-          <textarea class="form-control" id="summary" rows="3" placeholder="e.g., Internal visual inspection of 100% of accessible welds..."></textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-12">
-          <label for="defects" class="form-label">Weld Table Data (Format: Weld #: Pipe Size | Fitting Type | Defect | Repaired | Final Result)</label>
-          <textarea class="form-control" id="defects" rows="10" placeholder="e.g.,\n1: 3&quot; | Reducer |  | ---- | \n4: 4&quot; | 90° Elbow | IP | Pending | "></textarea>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-6">
-          <label for="image1" class="form-label">Image 1 URL (Google Drive share link)</label>
-          <input type="url" class="form-control" id="image1" placeholder="https://drive.google.com/uc?export=view&id=...">
-        </div>
-        <div class="col-md-6">
-          <label for="image2" class="form-label">Image 2 URL</label>
-          <input type="url" class="form-control" id="image2" placeholder="https://drive.google.com/uc?export=view&id=...">
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-4">
-          <label for="compliance" class="form-label">Compliance</label>
-          <input type="text" class="form-control" id="compliance" placeholder="e.g., API 510 / ASME IX (Accept/Reject per defect)">
-        </div>
-        <div class="col-md-4">
-          <label for="actions" class="form-label">Recommended Actions</label>
-          <input type="text" class="form-control" id="actions" placeholder="e.g., Grind, Rework">
-        </div>
-        <div class="col-md-4">
-          <label for="overall" class="form-label">Overall Quality (1-10)</label>
-          <input type="number" class="form-control" id="overall" min="1" max="10" placeholder="e.g., 8">
-        </div>
-      </div>
-    </form>
+  // Parse defects (format: Weld #: Pipe Size | Fitting Type | Defect | Repaired | Final Result)
+  let weldData = [];
+  defectsRaw.forEach(line => {
+    const parts = line.split(':');
+    if (parts.length === 2) {
+      const weld = parts[0].trim();
+      const details = parts[1].split('|').map(d => d.trim());
+      const pipeSize = details[0] || 'Unknown';
+      const fitting = details[1] || 'Unknown';
+      const defect = details[2] || '';
+      const repaired = details[3] || '----';
+      const final = details[4] || (defect ? 'Pending' : '');
+      const result = defect ? 'Reject' : 'Accept';
+      weldData.push([weld, pipeSize, fitting, defect, result, repaired, final]);
+    }
+  });
+  if (weldData.length === 0) {
+    // Default to PDF sample if empty
+    weldData = [
+      ['1', '3"', 'Reducer', '', 'Accept', '----', ''],
+      ['2', '4"', 'Reducer', '', 'Accept', '----', ''],
+      ['3', '3"', '90° Elbow', '', 'Accept', '----', ''],
+      ['4', '4"', '90° Elbow', 'IP', 'Reject', 'Pending', ''],
+      // Truncated; add full from PDF if needed
+    ];
+  }
 
-    <div class="text-center">
-      <button class="btn btn-primary btn-lg" onclick="generateReport()">Generate Report</button>
+  // Rejected welds for image sections
+  const rejectedWelds = weldData.filter(row => row[4] === 'Reject').map(row => row[0]);
+
+  // Stock image URLs for welds (close-up and location; cycle through them)
+  const weldCloseUps = [
+    'https://stainlesssolutionscip.com/wp-content/uploads/2023/03/SS-Borescope-Weld-Inspection.webp',
+    'https://www.ipec.ie/wp-content/uploads/2022/02/Orbital-Weld-800-x-500.jpg',
+    'https://www.shutterstock.com/image-photo/closeup-pipe-tky-joint-welding-600nw-2690128119.jpg'
+  ];
+  const weldLocations = [
+    'https://static.redasafe.com/media/mageplaza/blog/post/p/i/pipe_markers_guide.jpg',
+    'https://cdn.thefabricator.com/a/welder-training-essentials-positioning-it-right-1695415341.JPG',
+    'https://www.industrialtradeservices.com/wp-content/uploads/2022/03/Weld-Symbols.webp'
+  ];
+
+  // Build report HTML
+  const reportDiv = document.getElementById('report-output');
+  reportDiv.innerHTML = `
+    <div class="mb-4">
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <h1 class="logo">B T D</h1>
+          <p class="company">Baxter Technical Dynamics</p>
+          <p class="services">Inspection Services</p>
+        </div>
+        <div class="form-rev">
+          FORM INS.01.00<br>
+          REV. 0<br>
+          Page 1 of 17
+        </div>
+      </div>
+      <h2 class="report-title text-center">WELD INSPECTION REPORT</h2>
     </div>
-  </div>
 
-  <div id="report-output" class="mt-5 container bg-white p-4 shadow-lg text-dark"></div>
+    <table class="table table-bordered">
+      <thead>
+        <tr><th>Client</th><th>Location/Facility</th><th>Date of Inspection</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>${client}</td><td>${location}</td><td>${date}</td></tr>
+      </tbody>
+    </table>
 
-  <script src="report.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr><th>Asset Number</th><th>Serial Number</th><th>Year Built</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>${asset}</td><td>${serial}</td><td>${year}</td></tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr><th>Material</th><th>Service</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>${material}</td><td>${service}</td><td>${description}</td></tr>
+      </tbody>
+    </table>
+
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr><th>Inspector's Name</th><th>Inspector's Certification Number</th><th>Signature</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>${inspector}</td><td><a href="${cert}" class="text-primary">Matt Baxter Certifications Link</a></td><td>${signature}</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="mt-4">Scope:</h3>
+    <p>${scope}</p>
+
+    <h3 class="mt-3">Summary:</h3>
+    <p>${summary}</p>
+
+    <!-- Pump Skid Overview Photo (Page 1 stock image) -->
+    <div class="image-border p-2 mt-3">
+      <img src="${image1}" class="img-fluid" alt="Pump Skid Overview">
+      <p class="text-center small">Pump Skid Overview</p>
+    </div>
+
+    <!-- Simulate Page 2: AWS Text -->
+    <div class="appendix mt-5 border-top pt-3">
+      <p class="form-rev text-end">Page 2 of 17</p>
+      <h4>AWS D18.1/D18.1M:2020</h4>
+      <h5>6. Visual Examination Requirements</h5>
+      <!-- Full text as before; truncated here for brevity -->
+      <p>6.1 Responsibilities for and Extent of Examination...</p>
+      <!-- Add the full transcribed text from your PDF screenshots -->
+    </div>
+
+    <!-- Simulate Page 3: Table 3 -->
+    <div class="appendix mt-5 border-top pt-3">
+      <p class="form-rev text-end">Page 3 of 17</p>
+      <h5>Table 3 Visual Examination Acceptance Criteria for the Inside Surfaces of Welds</h5>
+      <table class="table table-bordered">
+        <!-- Full table as before -->
+      </table>
+    </div>
+
+    <!-- Simulate Page 4: Isometric Drawing 1 -->
+    <div class="appendix mt-5 border-top pt-3">
+      <p class="form-rev text-end">Page 4 of 17</p>
+      <div class="image-border p-2">
+        <img src="${image2}" class="img-fluid" alt="Isometric Drawing 1">
+        <p class="text-center small">Isometric Drawing 1</p>
+      </div>
+    </div>
+
+    <!-- Simulate Page 5: Isometric Drawing 2 -->
+    <div class="appendix mt-5 border-top pt-3">
+      <p class="form-rev text-end">Page 5 of 17</p>
+      <div class="image-border p-2">
+        <img src="https://www.researchgate.net/publication/228949032/figure/fig1/AS:300814963888137@1448731284506/Example-of-a-Skid-Design.png" class="img-fluid" alt="Isometric Drawing 2">
+        <p class="text-center small">Isometric Drawing 2</p>
+      </div>
+    </div>
+
+    <!-- Weld Table (Pages 6-8) -->
+    <div class="mt-5 border-top pt-3">
+      <p class="form-rev text-end">Page 6 of 17</p>
+      <h3>Blend Tank 50001 & 50004 Pump Skid Weld Inspections</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr><th>Weld #</th><th>Pipe Size</th><th>Fitting Type</th><th>Defect</th><th>Results</th><th>Repaired</th><th>Final Result</th></tr>
+        </thead>
+        <tbody>
+          ${weldData.map(row => `
+            <tr>
+              <td>${row[0]}</td>
+              <td>${row[1]}</td>
+              <td>${row[2]}</td>
+              <td>${row[3]}</td>
+              <td class="${row[4] === 'Accept' ? 'accept' : 'reject'}">${row[4]}</td>
+              <td>${row[5]}</td>
+              <td class="${row[6] || row[4] === 'Accept' ? 'accept' : 'reject'}">${row[6] || row[4]}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Rejected Weld Images (Starting Page 8, paired with stock images) -->
+    <div class="mt-5 border-top pt-3">
+      <p class="form-rev text-end">Page 8 of 17</p>
+      <h3>Rejected Weld Images</h3>
+      <div class="row">
+        ${rejectedWelds.map((w, index) => `
+          <div class="col-md-6 mb-3">
+            <div class="image-border p-2">
+              <img src="${weldCloseUps[index % weldCloseUps.length]}" class="img-fluid" alt="Weld Number ${w}">
+              <p class="text-center small">Weld Number ${w}</p>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="image-border p-2">
+              <img src="${weldLocations[index % weldLocations.length]}" class="img-fluid" alt="Weld Number ${w} Location">
+              <p class="text-center small">Weld Number ${w} Location</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <h3 class="mt-4">Compliance</h3>
+    <p>${compliance}</p>
+
+    <h3 class="mt-3">Recommended Actions</h3>
+    <p>${actions}</p>
+
+    <h3 class="mt-3">Overall Weld Quality</h3>
+    <p class="text-center bg-light p-2">${overall}/10</p>
+
+    <p class="text-end mt-4">Inspector: ${inspector}<br>Prepared by: SecondEyesAI™</p>
+  `;
+}
